@@ -1,0 +1,205 @@
+﻿<html lang="en">
+
+<head>
+
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="http://getbootstrap.com/examples/justified-nav/justified-nav.css" rel="stylesheet">
+
+    @*<style>
+            .axis path,
+            .axis line { fill: none; stroke: black; shape-rendering: crispEdges; }
+            .axis text { font-family: sans-serif; font-size: 11px; fill: #999; }
+
+            .inner_line path,
+            .inner_line line { fill: none; stroke: #E7E7E7; shape-rendering: crispEdges; }
+
+            .legend { font-size: 12px; font-family: Arial, Helvetica, sans-serif; }
+        </style>*@
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    //
+    <script src="~/Content/d3.min.js"></script>
+
+    <script src="//d3js.org/d3.v4.min.js"></script>
+    <script>
+        var data1 = [];
+        var data2 = [];
+        var data3 = [{
+            "sale": "202",
+            "year": "2000"
+        }, {
+            "sale": "215",
+            "year": "2001"
+        }, {
+            "sale": "179",
+            "year": "2002"
+        }, {
+            "sale": "199",
+            "year": "2003"
+        }, {
+            "sale": "134",
+            "year": "2003"
+        }, {
+            "sale": "176",
+            "year": "2010"
+        }];
+        $(function () {
+            RandData(data1, 30);
+            RandData(data2, 30);
+
+
+            var x_max = getMaxdata(data1);
+            var x_min = getMindata(data1);
+
+            var y_max = getMaxdata_y(data1);
+            var y_min = getMindata_y(data1);
+
+
+            var vis = d3.select("#visualisation"),
+        WIDTH = 1000,
+        HEIGHT = 500,
+        MARGINS = {
+            top: 20,
+            right: 20,
+            bottom: 20,
+            left: 50
+        },
+
+
+        xScale = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([y_min, y_max]),
+        yScale = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([x_min, x_max]),
+
+
+            //定义横轴
+              xAxis = d3.svg.axis()
+            .scale(xScale)
+            .orient("bottom")
+            .ticks(data1.length);
+
+
+
+            //定义纵轴
+            yAxis = d3.svg.axis()
+          .scale(yScale)
+          .orient("left")
+          .ticks(10);
+
+
+            //-------
+
+            vis.append("svg:g")
+        .attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
+        .call(xAxis);
+
+
+            yAxis = d3.svg.axis()
+        .scale(yScale)
+        .orient("left");
+
+            vis.append("svg:g")
+        .attr("transform", "translate(" + (MARGINS.left) + ",0)")
+        .call(yAxis);
+
+            var lineGen = d3.svg.line()
+      .x(function (d) {
+          return xScale(d.year);
+      })
+      .y(function (d) {
+          return yScale(d.sale);
+      });
+
+            vis.append('svg:path')
+      .attr('d', lineGen(data1))
+      .attr('stroke', 'green')
+      .attr('stroke-width', 1)
+      .attr('fill', 'none'),
+            vis.append('svg:path')
+     .attr('d', lineGen(data2))
+     .attr('stroke', 'red')
+     .attr('stroke-width', 1)
+     .attr('fill', 'none'),
+
+            vis.append('svg:path')
+    .attr('d', lineGen(data3))
+    .attr('stroke', 'red')
+    .attr('stroke-width', 1)
+    .attr('fill', 'none');
+
+        }
+        );
+
+
+
+        //Math.random()
+        function RandData(data, count) {
+            var xBase = 1000;
+            for (var i = 0; i < count; i++) {
+
+                var rand = Math.round(Math.random() * 5);
+
+                data.push({ sale: rand.toString(), year: xBase.toString() });
+
+                xBase = parseInt(xBase + Math.random() + 2);
+            }
+        }
+
+        //取得多维数组最小值
+        function getMindata(arr) {
+            mindata = arr[0].sale;
+            for (i = 0; i < arr.length; i++) {
+                if (arr[i].sale < mindata) {
+                    mindata = arr[i].sale;
+                }
+            }
+            return mindata;
+        }
+
+        //取得多维数组最大值
+        function getMaxdata(arr) {
+            maxdata = arr[0].sale;
+            for (i = 0; i < arr.length; i++) {
+                if (arr[i].sale > maxdata) {
+                    maxdata = arr[i].sale;
+                }
+            }
+            return maxdata;
+        }
+        //取得多维数组最小值
+        function getMindata_y(arr) {
+            mindata = arr[0].year;
+            for (i = 0; i < arr.length; i++) {
+                if (arr[i].year < mindata) {
+                    mindata = arr[i].year;
+                }
+            }
+            return mindata;
+        }
+
+        //取得多维数组最大值
+        function getMaxdata_y(arr) {
+            maxdata = arr[0].year;
+            for (i = 0; i < arr.length; i++) {
+                if (arr[i].year > maxdata) {
+                    maxdata = arr[i].year;
+                }
+            }
+            return maxdata;
+        }
+
+
+    </script>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="jumbotron">
+            <svg id="visualisation" width="1000" height="500"></svg>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

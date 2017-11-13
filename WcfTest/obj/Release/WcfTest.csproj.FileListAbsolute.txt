@@ -1,0 +1,5 @@
+E:\project\TestDemo\WcfTest\bin\Release\WcfTest.exe.config
+E:\project\TestDemo\WcfTest\bin\Release\WcfTest.exe
+E:\project\TestDemo\WcfTest\bin\Release\WcfTest.pdb
+E:\project\TestDemo\WcfTest\obj\Release\WcfTest.exe
+E:\project\TestDemo\WcfTest\obj\Release\WcfTest.pdb
